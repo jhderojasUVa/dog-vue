@@ -11,7 +11,9 @@
  * Is a simple view.
  */
 export default {
-    props: ['options'],
+    props: {
+        options: Array, 
+    },
     data() {
         return {
             selected: undefined,
@@ -32,7 +34,7 @@ export default {
 <template>
     <select v-on:change="sendToSearch()" :selected="selected">
         <option>Random...</option>
-        <option v-for="option in options">{{ option }}</option>
+        <option :key="option" v-for="option in options">{{ option }}</option>
     </select>
 </template>
 
@@ -43,6 +45,9 @@ select {
     padding-right: 0.5em;
     border: 1px solid black;
     margin-right: 0.5em;
+    margin-bottom: 5px;
+
+    transition: width 0.25s;
 }
 
 select:focus {

@@ -23,22 +23,48 @@ export default {
     data() {
         return {
             breed: [],
+            secondbreed: [],
+            currentFistBreed: null,
         };
     },
     watch: {
         currentBreeds(newValue, oldValue) {
             // change object to array with the keys
             // to send to child via properties
+
+            // bulldog has two
+            this._breed = newValue;
             this.breed = Object.keys(newValue);
         },
+    },
+    methods: {
+        changeSelected(index) {
+            // set the choosed one
+            this.currentFistBreed = this.breed[index - 1];
+            const second = Object.entries(this._breed);
+
+            if (second[index - 1] && second[index - 1][1].length > 0 ) {
+                // we have second breed
+                this.secondbreed = second[index - 1][1];
+            } else {
+                this.secondbreed = [];
+                this.currentFistBreed = this.breed[index - 1];
+                this.$emit('breedSelected', this.currentFistBreed);
+            }
+        },
+        changeSelectedSecond(index) {
+            // emit to app the breed and sub breed
+            this.$emit('secondBreedSelected', this.currentFistBreed, this.secondbreed[index]);
+        }
     },
     components: { Selector }
 }
 </script>
 
 <template>
-    <div id="search">
-        <Selector :options="breed" @seleted="$emit('breedSelected', index)" />
+    <div id="search" :class="[secondbreed.length > 0 ? 'maxSize' : '', 'standarSize']">
+        <Selector :options="breed" @seleted="changeSelected" />
+        <Selector v-if="secondbreed.length > 0"  :options="secondbreed" @seleted="changeSelectedSecond" />
     </div>
 </template>
 
@@ -49,11 +75,20 @@ export default {
     bottom: 10px;
     right: 10px;
     width: 185px;
-    height: 25px;
     padding: 0.5em;
     background-color: white;
     text-align: right;
     border: 1px solid rgba(0, 0, 0, 0.3);
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.8);
+    transition: height 0.25s;
+    overflow: hidden;
+}
+
+.standarSize {
+    height: 25px;
+}
+
+.maxSize {
+    height: 55px;
 }
 </style>

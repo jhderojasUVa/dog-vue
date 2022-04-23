@@ -49,19 +49,24 @@ export default {
      * will show the error on the screen
      * @param {number} index 
      */
-    async selectedBreed(index) {
+    async selectedBreed(dog) {
       // reset error
       this.sucess = true;
-      // search by index the name
-      const breedToSearch = Object.keys(this.currentBreeds)[index - 1]; // remember the choose one... is index 0, you need to remove 1
       // search the dog
-      this.currentDog = await API.getDog(breedToSearch);
+      this.currentDog = await API.getDog(dog);
 
       // is there's an error on the backend (this case only retrieve the dog)
       if (!this.currentDog) {
         this.sucess = false;
       }
     },
+    async changeSelectedSecond(dog, subdog) {
+      this.currentDog = await API.getDog(dog, subdog);
+
+      if (!this.currentDog) {
+      this.sucess = false;
+    }
+    }
   },
   components: { Dog, Search, Error }
 }
@@ -74,7 +79,7 @@ export default {
   <div v-else>
     <Error />
   </div>
-  <Search :currentBreeds="currentBreeds" @breedSelected="selectedBreed" />
+  <Search :currentBreeds="currentBreeds" @breedSelected="selectedBreed" @secondBreedSelected="changeSelectedSecond"/>
 </template>
 
 
