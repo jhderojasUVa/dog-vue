@@ -32,22 +32,13 @@ export default {
             this.breed = Object.keys(newValue);
         },
     },
-    methods: {
-        getSelected(index) {
-            // now bubble to parent again
-            // because is the controller and this is dummy/aka stupid view
-            // here we can translate from index to name, but the pattern used
-            // needs to be changed on the controller (aka App.vue file)
-            this.$emit('breedSelected', index);
-        }
-    },
     components: { Selector }
 }
 </script>
 
 <template>
     <div id="search">
-        <Selector :options="breed" @seleted="getSelected" />
+        <Selector :options="breed" @seleted="$emit('breedSelected', index)" />
     </div>
 </template>
 

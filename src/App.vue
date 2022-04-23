@@ -61,7 +61,7 @@ export default {
       if (!this.currentDog) {
         this.sucess = false;
       }
-    }
+    },
   },
   components: { Dog, Search, Error }
 }
