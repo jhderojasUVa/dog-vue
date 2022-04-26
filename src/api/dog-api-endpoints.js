@@ -12,11 +12,10 @@ const baseUrl = 'https://dog.ceo/api';
 const randomImage = '/breeds/image/random';
 // breed
 const listBreeds = '/breeds/list/all';
-// show bread if any
+// show sub-bread if any
 const subBreed = '/breed/{BREED}/list';
 // images
-const byBreed = '/breed/{BREED}/images/random';
-const byBreedandSubBreed = '/breed/{BREED}/{SUBBREED}/images/random';
+const byBreed = '/breed/{BREED}/images';
 
 export const RESPONSE_STATUS_MESSAGES = {
     ok: 'success',
@@ -29,5 +28,4 @@ export const API_ENDPOINTS = {
     listBreeds,
     subBreed,
     byBreed,
-    byBreedandSubBreed,
 }

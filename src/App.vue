@@ -17,13 +17,15 @@ import API from './api/dog-api';
 import Dog from './components/dog/Dog.vue'
 import Search from './components/search/Search.vue';
 import Error from './components/error/Error.vue';
+import MyForm from './components/form/Form.vue';
 
 export default {
   data() {
     return {
       currentDog: undefined,
       currentBreeds: undefined,
-      sucess: true, // for errors from the backend (trigger error setting to false if you want)
+      sucess: true, // for errors from the backend (trigger error setting to false if you want),
+      fileUploadSuccess: false,
     }
   },
   async mounted() {
@@ -49,37 +51,43 @@ export default {
      * will show the error on the screen
      * @param {number} index 
      */
-    async selectedBreed(dog) {
+    async selectedBreed(index) {
       // reset error
       this.sucess = true;
+      // search by index the name
+      const breedToSearch = Object.keys(this.currentBreeds)[index - 1]; // remember the choose one... is index 0, you need to remove 1
       // search the dog
-      this.currentDog = await API.getDog(dog);
+      this.currentDog = await API.getDog(breedToSearch);
 
       // is there's an error on the backend (this case only retrieve the dog)
       if (!this.currentDog) {
         this.sucess = false;
       }
     },
-    async changeSelectedSecond(dog, subdog) {
-      this.currentDog = await API.getDog(dog, subdog);
-
-      if (!this.currentDog) {
-      this.sucess = false;
-    }
+    async processThing(data) {
+      this.fileUploadSuccess = false
+      let response;
+      try {
+        response = await API.sendThings(data);
+      } catch (err) {
+        response = false;
+      }
+      this.fileUploadSuccess = response;
     }
   },
-  components: { Dog, Search, Error }
+  components: { Dog, Search, Error, MyForm }
 }
 </script>
 
 <template>
+  <MyForm @sendEverything="processThing" :fileUploadSuccess="fileUploadSuccess"/>
   <div v-if="sucess" >
     <Dog :currentDog="currentDog" />
   </div>
   <div v-else>
     <Error />
   </div>
-  <Search :currentBreeds="currentBreeds" @breedSelected="selectedBreed" @secondBreedSelected="changeSelectedSecond"/>
+  <Search :currentBreeds="currentBreeds" @breedSelected="selectedBreed" />
 </template>
 
 
